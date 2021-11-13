@@ -10,17 +10,23 @@ console.log(event);
 var content=event.results[0][0].transcript;
 console.log(content);
 document.getElementById("textbox").innerHTML=content;
-speakInfo()
+if(content=="take my selfie"){
+ speakInfo()   
+}
 }
 
 function speakInfo(){
 var Synth= window.speechSynthesis;
-speakdata=document.getElementById("textbox").value;
+speakdata="Taking you selfie in 5 seconds"
 var utter=new SpeechSynthesisUtterance(speakdata);
 utter.lang="en-GB";
 utter.pitch=10.2;
 Synth.speak(utter)
 Webcam.attach(camera);
+setTimeout(function(){
+    take_snapshot()
+    save_img()
+},5000);
 }
 
 Webcam.set({
@@ -28,3 +34,16 @@ Webcam.set({
 });
 
 camera=document.getElementById("camera");
+
+function take_snapshot(){
+    Webcam.snap(function(data_url){
+document.getElementById("result").innerHTML="<img id='src_img' src='"+data_url+"'>"
+    });
+}
+
+function save_img(){
+    link=document.getElementById("link");
+    img=document.getElementById("src_img").src;
+    link.href=img;
+    link.click()
+}
